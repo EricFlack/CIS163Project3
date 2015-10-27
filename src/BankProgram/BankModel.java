@@ -176,7 +176,7 @@ public class BankModel extends AbstractTableModel {
 
             out.writeObject(accounts1);
             out.close();
-            fileOut.close();
+            //fileOut.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
