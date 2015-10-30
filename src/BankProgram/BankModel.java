@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
+import java.util.Collections;
 
 /**
  * Created by flackeri on 10/23/15.
@@ -79,14 +80,14 @@ public class BankModel extends AbstractTableModel {
     }
 
 //    public Account findAccount(int acctNumber){
-//        sortAccountNumber(accounts);
+//        sortNumber();
 //        int i = search(accounts, 0, accounts.size() - 1, acctNumber);
 //        if(i != -1)
 //            return accounts.get(i);
 //        else
-//            return accounts.get(0); //
+//            return accounts.get(0);
 //    }
-
+//
 //    private <T extends Comparable<T>> int search(ArrayList<Account> data, int min, int max, int number){
 //        int location = -1;
 //        int mid = (min + max) / 2;
@@ -149,29 +150,29 @@ public class BankModel extends AbstractTableModel {
         out.close();
     }
 
-    public void loadText(String filename){
-        accounts.clear();
-        try{
-            // open the data file
-            Scanner fileReader = new Scanner(new File(filename));
-
-            while(fileReader.hasNext()){
-                int number = fileReader.nextInt();
-                String owner = fileReader.nextLine();
-                //figure out how calendar is saved in text
-                double balance = fileReader.nextDouble();
-                Account newAccount = Account(number, owner, date, balance);
-                accounts.add(newAccount);
-            }
-
-            fileReader.close();
-        }
-
-        // could not find file
-        catch(FileNotFoundException error) {
-            System.out.println("File not found ");
-        }
-    }
+//    public void loadText(String filename){
+//        accounts.clear();
+//        try{
+//            // open the data file
+//            Scanner fileReader = new Scanner(new File(filename));
+//
+//            while(fileReader.hasNext()){
+//                int number = fileReader.nextInt();
+//                String owner = fileReader.nextLine();
+//                //figure out how calendar is saved in text
+//                double balance = fileReader.nextDouble();
+//                Account newAccount = Account(number, owner, date, balance);
+//                accounts.add(newAccount);
+//            }
+//
+//            fileReader.close();
+//        }
+//
+//        // could not find file
+//        catch(FileNotFoundException error) {
+//            System.out.println("File not found ");
+//        }
+//    }
     
      public void saveBinary(File fileName) {
 
