@@ -63,6 +63,8 @@ public class BankModel extends AbstractTableModel {
 
     public void add(Account account){
         this.accounts.add(account);
+        fireTableRowsInserted(0, accounts.size());
+
 
     }
 //    public Account findAccount(int acctNumber){
