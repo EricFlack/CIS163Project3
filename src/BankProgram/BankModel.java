@@ -92,6 +92,28 @@ public class BankModel extends AbstractTableModel {
 //        return location;
 //    }
 
+     public void sortNumber() {
+        if (accounts.size() > 1) {
+            Collections.sort(accounts, new AccountNumber());
+            this.fireTableRowsUpdated(0, accounts.size() - 1);
+        }
+
+    }
+
+    public void sortOwner() {
+        if (accounts.size() > 1) {
+            Collections.sort(accounts, new AccountOwner());
+            this.fireTableRowsUpdated(0, accounts.size() - 1);
+        }
+    }
+
+    public void sortOwner() {
+        if (accounts.size() > 1) {
+            Collections.sort(accounts, new AccountDateOpened());
+            this.fireTableRowsUpdated(0, accounts.size() - 1);
+        }
+    }
+
     private int compareTo(int comparison, int other){
         if(comparison > other)
             return 1;
