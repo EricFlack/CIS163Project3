@@ -207,4 +207,37 @@ public class BankModel extends AbstractTableModel {
 
         in.close();
     }
+    
+     public void saveXML(String fileName){
+        StringBuilder sb = new StringBuilder();
+        String s = sb.toString();
+
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+            out.write(s);
+            out.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        sb.append("<?xml version=1.0 encoding=utf-8?>\n");
+        sb.append("\t<Account>\n");
+        sb.append("\t<Number>" + accounts.getClass() + "<Number>\n" );
+        sb.append("<Owner>" + accounts.getClass() + "<Owner>\n" );
+        sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n" );
+        sb.append("<Balance>" + accounts.getClass() + "<Balance>\n" );
+
+        
+        if(accounts instanceof SavingsAccount){
+            sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n" );
+            sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n" );
+            sb.append("<Account>\n");
+        }
+        else {
+            sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
+            sb.append("<Account>\n");
+        }
+    }
 }
