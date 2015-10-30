@@ -3,9 +3,9 @@ package BankProgram;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
-import java.lang.Comparable;
 import java.io.*;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 /**
@@ -64,9 +64,20 @@ public class BankModel extends AbstractTableModel {
     public void add(Account account){
         this.accounts.add(account);
         fireTableRowsInserted(0, accounts.size());
-
-
     }
+
+    public void remove(Account account){
+        int removeLoc = accounts.indexOf(account);
+        this.accounts.remove(removeLoc);
+        fireTableRowsDeleted(removeLoc, removeLoc);
+    }
+
+    public void update(Account account){
+        int updateLoc = accounts.indexOf(this);
+        this.accounts.set(updateLoc, account);
+        fireTableRowsUpdated(updateLoc, updateLoc);
+    }
+
 //    public Account findAccount(int acctNumber){
 //        sortAccountNumber(accounts);
 //        int i = search(accounts, 0, accounts.size() - 1, acctNumber);
@@ -114,32 +125,6 @@ public class BankModel extends AbstractTableModel {
         }
     }
 
-    private int compareTo(int comparison, int other){
-        if(comparison > other)
-            return 1;
-        else if(comparison == other)
-            return 0;
-        else
-            return -1;
-    }
-
-//    public void sortAccountNumber(ArrayList<Account> data){
-//        int position, scan;
-//
-//        for(position = data.size() - 1; position >= 0; position++){
-//            for(scan = 0; scan <= position - 1; scan++){
-//                if(compareTo((int) getValueAt(scan, 0), (int) getValueAt(scan + 1, 0)) > 0)
-//                    swap(data, scan, scan + 1);
-//            }
-//        }
-//    }
-
-    private void swap(ArrayList<Account> data, int swap1, int swap2){
-        Account temp = data.get(swap1);
-        data.set(swap1, data.get(swap2));
-        data.set(swap2, temp);
-    }
-
     public void saveText(String filename){
         PrintWriter out = null;
         try {
@@ -150,35 +135,33 @@ public class BankModel extends AbstractTableModel {
             e.printStackTrace();
         }
 
-        out.print(colNames[0]);
-        out.print(colNames[1]);
-        out.print(colNames[2]);
+        out.print(colNames[0] + "\t");
+        out.print(colNames[1] + "\t");
+        out.print(colNames[2] + "\t");
         out.println(colNames[3]);
 
         for(int i = 0; i <accounts.size(); i++) {
-            out.print(getValueAt(i, 0));
-            out.print(getValueAt(i, 1));
-            out.print(getValueAt(i, 2));
+            out.print(getValueAt(i, 0) + "\t");
+            out.print(getValueAt(i, 1) + "\t");
+            out.print(getValueAt(i, 2) + "\t");
             out.println(getValueAt(i, 3));
         }
         out.close();
     }
 
     public void loadText(String filename){
-
+        accounts.clear();
         try{
             // open the data file
             Scanner fileReader = new Scanner(new File(filename));
 
-            int i = 0;
             while(fileReader.hasNext()){
-                if(i > 4){
-                    if(i % 4 == 0){
-                        //accounts.add();
-                        //create add function
-                    }
-                }
-                i++;
+                int number = fileReader.nextInt();
+                String owner = fileReader.nextLine();
+                //figure out how calendar is saved in text
+                double balance = fileReader.nextDouble();
+                Account newAccount = Account(number, owner, date, balance);
+                accounts.add(newAccount);
             }
 
             fileReader.close();

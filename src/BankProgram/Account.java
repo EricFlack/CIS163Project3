@@ -5,7 +5,9 @@ package BankProgram;
  */
 import java.io.Serializable;
 import java.util.GregorianCalendar;
-public abstract class Account implements Serializable{
+import java.util.Objects;
+
+public abstract class Account implements Serializable, Comparable<Account>{
 
     private static final long serialVersionUID = 1L;
 
@@ -58,5 +60,15 @@ public abstract class Account implements Serializable{
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public int compareTo(Account other){
+        if(this.getNumber() > other.getNumber())
+            return 1;
+        else if(this.getNumber() == other.getNumber())
+            return 0;
+        else
+            return -1;
     }
 }
