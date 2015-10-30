@@ -107,7 +107,7 @@ public class BankModel extends AbstractTableModel {
         }
     }
 
-    public void sortOwner() {
+    public void sortDateOpened() {
         if (accounts.size() > 1) {
             Collections.sort(accounts, new AccountDateOpened());
             this.fireTableRowsUpdated(0, accounts.size() - 1);
