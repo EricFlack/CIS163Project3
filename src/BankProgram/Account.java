@@ -62,12 +62,16 @@ public abstract class Account implements Serializable, Comparable<Account>{
         this.balance = balance;
     }
 
+    public abstract boolean equals(Object other);
+
+    public abstract String toString();
+
     @Override
     public int compareTo(Account other){
-        if(this.getNumber() > other.getNumber())
-            return 1;
-        else if(this.getNumber() == other.getNumber())
+        if(this.getNumber() == other.getNumber())
             return 0;
+        else if(this.getNumber() > other.getNumber())
+            return 1;
         else
             return -1;
     }

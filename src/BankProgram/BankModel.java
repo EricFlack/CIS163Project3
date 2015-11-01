@@ -2,12 +2,12 @@ package BankProgram;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
+import javax.swing.text.DateFormatter;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.io.*;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.Scanner;
-import java.util.Collections;
 
 /**
  * Created by flackeri on 10/23/15.
@@ -73,10 +73,9 @@ public class BankModel extends AbstractTableModel {
         fireTableRowsDeleted(removeLoc, removeLoc);
     }
 
-    public void update(Account account){
-        int updateLoc = accounts.indexOf(this);
-        this.accounts.set(updateLoc, account);
-        fireTableRowsUpdated(updateLoc, updateLoc);
+    public void update(Account account, int location){
+        this.accounts.set(location, account);
+        fireTableRowsUpdated(location, location);
     }
 
 //    public Account findAccount(int acctNumber){
@@ -142,10 +141,7 @@ public class BankModel extends AbstractTableModel {
         out.println(colNames[3]);
 
         for(int i = 0; i <accounts.size(); i++) {
-            out.print(getValueAt(i, 0) + "\t");
-            out.print(getValueAt(i, 1) + "\t");
-            out.print(getValueAt(i, 2) + "\t");
-            out.println(getValueAt(i, 3));
+            out.println(accounts.get(i).toString());
         }
         out.close();
     }
@@ -159,7 +155,15 @@ public class BankModel extends AbstractTableModel {
 //            while(fileReader.hasNext()){
 //                int number = fileReader.nextInt();
 //                String owner = fileReader.nextLine();
-//                //figure out how calendar is saved in text
+//                try{
+//                    String dateString = fileReader.nextLine();
+//                    DateFormat format = new SimpleDateFormat("MM '/' DD '/' yyyy");
+//                    Date parsed = format.parse(dateString);
+//                    GregorianCalendar date = new GregorianCalendar();
+//                    date.setTime(parsed);
+//                } catch(ParseException e){
+//                    System.err.println("ParseException");
+//                }
 //                double balance = fileReader.nextDouble();
 //                Account newAccount = Account(number, owner, date, balance);
 //                accounts.add(newAccount);

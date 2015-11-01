@@ -39,4 +39,29 @@ public class SavingsAccount extends Account {
     public void setInterestRate(double interestRate) {
         this.interestRate = interestRate;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if (other instanceof SavingsAccount) {
+            SavingsAccount otherSavings = (SavingsAccount) other;
+            if (otherSavings.getNumber() == this.getNumber() &&
+                    otherSavings.getOwner() == this.getOwner() &&
+                    otherSavings.getDateOpened() == this.getDateOpened() &&
+                    otherSavings.getBalance() == this.getBalance() &&
+                    otherSavings.getMinBalance() == this.getMinBalance() &&
+                    otherSavings.getInterestRate() == this.getInterestRate())
+                return true;
+            else
+                return false;
+        }
+        else return false;
+    }
+
+    @Override
+    public String toString(){
+        String savings;
+        savings = "" + this.getNumber() + "\t" + this.getOwner() + "\t" + this.getDateOpened() + "\t" +
+                this.getBalance() + "\t" + this.getMinBalance() + "\t" + this.getInterestRate();
+        return savings;
+    }
 }

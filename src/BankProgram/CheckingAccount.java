@@ -27,4 +27,28 @@ public class CheckingAccount extends Account{
     public void setMonthlyFee(double monthlyFee) {
         this.monthlyFee = monthlyFee;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if (other instanceof CheckingAccount) {
+            CheckingAccount otherChecking = (CheckingAccount) other;
+            if (otherChecking.getNumber() == this.getNumber() &&
+                    otherChecking.getOwner() == this.getOwner() &&
+                    otherChecking.getDateOpened() == this.getDateOpened() &&
+                    otherChecking.getBalance() == this.getBalance() &&
+                    otherChecking.getMonthlyFee() == this.getMonthlyFee())
+                return true;
+            else
+                return false;
+        }
+        else return false;
+    }
+
+    @Override
+    public String toString(){
+        String checking;
+        checking = "" + this.getNumber() + "\t" + this.getOwner() + "\t" + this.getDateOpened() + "\t" +
+                this.getBalance() + "\t" + this.getMonthlyFee();
+        return checking;
+    }
 }
