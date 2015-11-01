@@ -77,6 +77,39 @@ public class BankModel extends AbstractTableModel {
         this.accounts.set(location, account);
         fireTableRowsUpdated(location, location);
     }
+    
+    public Account FindByOwner(String name){
+    for (Account a : this.accounts)
+    {
+        if (a.getOwner().equals(name))
+        {
+            return a;
+        }
+    }
+    return null;
+    }
+
+public Account FindByNumber(int num){
+    for (Account a : this.accounts)
+    {
+        if (a.getNumber() == num)
+        {
+            return a;
+        }
+    }
+    return null;
+    }
+
+public Account FindByDateOpened(GregorianCalendar date){
+    for (Account a : this.accounts)
+    {
+        if (a.getDateOpened().equals(date))
+        {
+            return a;
+        }
+    }
+    return null;
+    }
 
 //    public Account findAccount(int acctNumber){
 //        sortNumber();
