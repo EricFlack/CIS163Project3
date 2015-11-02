@@ -21,7 +21,7 @@ public class BankModel extends AbstractTableModel {
     private String[] colNames;
 
     public BankModel() {
-        accounts = new ArrayList<Account>();
+        accounts = new ArrayList<>();
         colNames = new String[] {"Number", "Date Opened", "Account Owner", "Current Balance"};
     }
 
@@ -111,31 +111,6 @@ public Account FindByDateOpened(GregorianCalendar date){
     return null;
     }
 
-//    public Account findAccount(int acctNumber){
-//        sortNumber();
-//        int i = search(accounts, 0, accounts.size() - 1, acctNumber);
-//        if(i != -1)
-//            return accounts.get(i);
-//        else
-//            return accounts.get(0);
-//    }
-//
-//    private <T extends Comparable<T>> int search(ArrayList<Account> data, int min, int max, int number){
-//        int location = -1;
-//        int mid = (min + max) / 2;
-//
-//        if(compareTo((int) getValueAt(mid, 0), number) == 0)
-//            location = mid;
-//        else if(compareTo((int) getValueAt(mid, 0), number) > 0){
-//            if(min <= mid - 1)
-//                location = search(data, min, mid - 1, number);
-//        }
-//        else if(mid + 1 <= max)
-//            location = search(data, mid + 1, max, number);
-//
-//        return location;
-//    }
-
      public void sortNumber() {
         if (accounts.size() > 1) {
             Collections.sort(accounts, new AccountNumber());
@@ -168,48 +143,69 @@ public Account FindByDateOpened(GregorianCalendar date){
             e.printStackTrace();
         }
 
-        out.print(colNames[0] + "\t");
-        out.print(colNames[1] + "\t");
-        out.print(colNames[2] + "\t");
-        out.println(colNames[3]);
+        if (out != null) {
+            out.print("Type \t");
+            out.print(colNames[0] + "\t");
+            out.print(colNames[1] + "\t");
+            out.print(colNames[2] + "\t");
+            out.print(colNames[3] + "\t");
+            out.println("Info");
 
-        for(int i = 0; i <accounts.size(); i++) {
-            out.println(accounts.get(i).toString());
+            for (Account account : accounts) {
+                if (account instanceof CheckingAccount) {
+                    out.print("Checking");
+                    out.println(account.toString());
+                } else {
+                    out.print("Savings");
+                    out.println(account.toString());
+                }
+            }
+            out.close();
         }
-        out.close();
     }
 
-//    public void loadText(String filename){
-//        accounts.clear();
-//        try{
-//            // open the data file
-//            Scanner fileReader = new Scanner(new File(filename));
-//
-//            while(fileReader.hasNext()){
-//                int number = fileReader.nextInt();
-//                String owner = fileReader.nextLine();
-//                try{
-//                    String dateString = fileReader.nextLine();
-//                    DateFormat format = new SimpleDateFormat("MM '/' DD '/' yyyy");
-//                    Date parsed = format.parse(dateString);
-//                    GregorianCalendar date = new GregorianCalendar();
-//                    date.setTime(parsed);
-//                } catch(ParseException e){
-//                    System.err.println("ParseException");
-//                }
-//                double balance = fileReader.nextDouble();
-//                Account newAccount = Account(number, owner, date, balance);
-//                accounts.add(newAccount);
-//            }
-//
-//            fileReader.close();
-//        }
-//
-//        // could not find file
-//        catch(FileNotFoundException error) {
-//            System.out.println("File not found ");
-//        }
-//    }
+    public void loadText(String filename){
+        accounts.clear();
+        try{
+            // open the data file
+            Scanner fileReader = new Scanner(new File(filename));
+
+            while(fileReader.hasNext()){
+                GregorianCalendar date = new GregorianCalendar(Calendar.JANUARY, 1, 1970);
+                String type = fileReader.next();
+                int number = fileReader.nextInt();
+                String owner = fileReader.next();
+                try{
+                    String dateString = fileReader.next();
+                    DateFormat format = new SimpleDateFormat("MM '/' DD '/' yyyy");
+                    Date parsed = format.parse(dateString);
+                    date.setTime(parsed);
+                } catch(ParseException e){
+                    System.err.println("ParseException");
+                }
+                double balance = fileReader.nextDouble();
+                if(type.equals("Checking")) {
+                    double monthlyFee = fileReader.nextDouble();
+                    CheckingAccount newAccount = new CheckingAccount(number, owner, date, balance, monthlyFee);
+                    accounts.add(newAccount);
+                }
+                else{
+                    double minBalance = fileReader.nextDouble();
+                    double interestRate = fileReader.nextDouble();
+                    SavingsAccount newAccount = new SavingsAccount(number, owner, date,
+                            balance, minBalance, interestRate);
+                    accounts.add(newAccount);
+                }
+            }
+
+            fileReader.close();
+        }
+
+        // could not find file
+        catch(FileNotFoundException error) {
+            System.out.println("File not found ");
+        }
+    }
     
      public void saveBinary(File fileName) {
 
@@ -249,7 +245,7 @@ public Account FindByDateOpened(GregorianCalendar date){
         StringBuilder sb = new StringBuilder();
         String s = sb.toString();
 
-        PrintWriter out = null;
+        PrintWriter out;
         try {
             out = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
             out.write(s);
@@ -259,22 +255,23 @@ public Account FindByDateOpened(GregorianCalendar date){
             e.printStackTrace();
         }
 
-        sb.append("<?xml version=1.0 encoding=utf-8?>\n");
-        sb.append("\t<Account>\n");
-        sb.append("\t<Number>" + accounts.getClass() + "<Number>\n" );
-        sb.append("<Owner>" + accounts.getClass() + "<Owner>\n" );
-        sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n" );
-        sb.append("<Balance>" + accounts.getClass() + "<Balance>\n" );
+         for(int i = 0; i  < accounts.size(); i++) {
+             sb.append("<?xml version=1.0 encoding=utf-8?>\n");
+             sb.append("\t<Account>\n");
+             sb.append("\t<Number>" + accounts.getClass() + "<Number>\n");
+             sb.append("<Owner>" + accounts.getClass() + "<Owner>\n");
+             sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n");
+             sb.append("<Balance>" + accounts.getClass() + "<Balance>\n");
 
-        
-        if(accounts instanceof SavingsAccount){
-            sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n" );
-            sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n" );
-            sb.append("<Account>\n");
-        }
-        else {
-            sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
-            sb.append("<Account>\n");
-        }
+
+             if (accounts.get(i) instanceof SavingsAccount) {
+                 sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n");
+                 sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n");
+                 sb.append("<Account>\n");
+             } else {
+                 sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
+                 sb.append("<Account>\n");
+             }
+         }
     }
 }

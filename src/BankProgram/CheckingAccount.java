@@ -2,6 +2,8 @@ package BankProgram;
 
 import java.util.GregorianCalendar;
 import java.io.Serializable;
+import java.util.Objects;
+
 /**
  * Created by flackeri on 10/23/15.
  */
@@ -32,14 +34,12 @@ public class CheckingAccount extends Account{
     public boolean equals(Object other){
         if (other instanceof CheckingAccount) {
             CheckingAccount otherChecking = (CheckingAccount) other;
-            if (otherChecking.getNumber() == this.getNumber() &&
-                    otherChecking.getOwner() == this.getOwner() &&
-                    otherChecking.getDateOpened() == this.getDateOpened() &&
-                    otherChecking.getBalance() == this.getBalance() &&
-                    otherChecking.getMonthlyFee() == this.getMonthlyFee())
-                return true;
-            else
-                return false;
+            if (otherChecking.getNumber() == this.getNumber())
+                if (Objects.equals(otherChecking.getOwner(), this.getOwner()))
+                    if (otherChecking.getDateOpened() == this.getDateOpened())
+                        if (otherChecking.getBalance() == this.getBalance())
+                            if (otherChecking.getMonthlyFee() == this.getMonthlyFee()) return true;
+            return false;
         }
         else return false;
     }
@@ -48,7 +48,7 @@ public class CheckingAccount extends Account{
     public String toString(){
         String checking;
         checking = "" + this.getNumber() + "\t" + this.getOwner() + "\t" + this.getDateOpened() + "\t" +
-                this.getBalance() + "\t" + this.getMonthlyFee();
+                this.getBalance() + "\t Monthly Fee:" + this.getMonthlyFee();
         return checking;
     }
 }

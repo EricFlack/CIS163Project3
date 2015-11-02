@@ -1,6 +1,7 @@
 package BankProgram;
 
 import java.util.GregorianCalendar;
+import java.util.Objects;
 
 /**
  * Created by flackeri on 10/23/15.
@@ -44,15 +45,13 @@ public class SavingsAccount extends Account {
     public boolean equals(Object other){
         if (other instanceof SavingsAccount) {
             SavingsAccount otherSavings = (SavingsAccount) other;
-            if (otherSavings.getNumber() == this.getNumber() &&
-                    otherSavings.getOwner() == this.getOwner() &&
-                    otherSavings.getDateOpened() == this.getDateOpened() &&
-                    otherSavings.getBalance() == this.getBalance() &&
-                    otherSavings.getMinBalance() == this.getMinBalance() &&
-                    otherSavings.getInterestRate() == this.getInterestRate())
-                return true;
-            else
-                return false;
+            if (otherSavings.getNumber() == this.getNumber())
+                if (Objects.equals(otherSavings.getOwner(), this.getOwner()))
+                    if (otherSavings.getDateOpened() == this.getDateOpened())
+                        if (otherSavings.getBalance() == this.getBalance())
+                            if (otherSavings.getMinBalance() == this.getMinBalance())
+                                if (otherSavings.getInterestRate() == this.getInterestRate()) return true;
+            return false;
         }
         else return false;
     }
@@ -61,7 +60,8 @@ public class SavingsAccount extends Account {
     public String toString(){
         String savings;
         savings = "" + this.getNumber() + "\t" + this.getOwner() + "\t" + this.getDateOpened() + "\t" +
-                this.getBalance() + "\t" + this.getMinBalance() + "\t" + this.getInterestRate();
+                this.getBalance() + "\t Minimum Balance:" + this.getMinBalance() + " Interest Rate:" +
+                this.getInterestRate();
         return savings;
     }
 }
