@@ -21,7 +21,7 @@ public class BankModel extends AbstractTableModel {
     private String[] colNames;
 
     public BankModel() {
-        accounts = new ArrayList<>();
+        accounts = new ArrayList<Account>();
         colNames = new String[] {"Number", "Date Opened", "Account Owner", "Current Balance"};
     }
 
@@ -65,6 +65,11 @@ public class BankModel extends AbstractTableModel {
     public void add(Account account){
         this.accounts.add(account);
         fireTableRowsInserted(0, accounts.size());
+        /*
+        int addLoc = accounts.indexOf(account);
+        this.accounts.add(addLoc, account);
+        fireTableRowsInserted(addLoc, addLoc);
+        */
     }
 
     public void remove(Account account){
@@ -79,39 +84,39 @@ public class BankModel extends AbstractTableModel {
     }
     
     public Account FindByOwner(String name){
-    for (Account a : this.accounts)
-    {
-        if (a.getOwner().equals(name))
+        for (Account a : this.accounts)
         {
-            return a;
+            if (a.getOwner().equals(name))
+            {
+                return a;
+            }
         }
-    }
-    return null;
+        return null;
     }
 
-public Account FindByNumber(int num){
-    for (Account a : this.accounts)
-    {
-        if (a.getNumber() == num)
+    public Account FindByNumber(int num){
+        for (Account a : this.accounts)
         {
-            return a;
+            if (a.getNumber() == num)
+            {
+                return a;
+            }
         }
-    }
-    return null;
+        return null;
     }
 
-public Account FindByDateOpened(GregorianCalendar date){
-    for (Account a : this.accounts)
-    {
-        if (a.getDateOpened().equals(date))
+    public Account FindByDateOpened(GregorianCalendar date){
+        for (Account a : this.accounts)
         {
-            return a;
+            if (a.getDateOpened().equals(date))
+            {
+                return a;
+            }
         }
-    }
-    return null;
+        return null;
     }
 
-     public void sortNumber() {
+    public void sortNumber() {
         if (accounts.size() > 1) {
             Collections.sort(accounts, new AccountNumber());
             this.fireTableRowsUpdated(0, accounts.size() - 1);
@@ -207,7 +212,7 @@ public Account FindByDateOpened(GregorianCalendar date){
         }
     }
     
-     public void saveBinary(File fileName) {
+    public void saveBinary(File fileName) {
 
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
@@ -241,7 +246,7 @@ public Account FindByDateOpened(GregorianCalendar date){
         in.close();
     }
     
-     public void saveXML(String fileName){
+    public void saveXML(String fileName){
         StringBuilder sb = new StringBuilder();
         String s = sb.toString();
 
@@ -255,23 +260,23 @@ public Account FindByDateOpened(GregorianCalendar date){
             e.printStackTrace();
         }
 
-         for(int i = 0; i  < accounts.size(); i++) {
-             sb.append("<?xml version=1.0 encoding=utf-8?>\n");
-             sb.append("\t<Account>\n");
-             sb.append("\t<Number>" + accounts.getClass() + "<Number>\n");
-             sb.append("<Owner>" + accounts.getClass() + "<Owner>\n");
-             sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n");
-             sb.append("<Balance>" + accounts.getClass() + "<Balance>\n");
+        for(int i = 0; i  < accounts.size(); i++) {
+            sb.append("<?xml version=1.0 encoding=utf-8?>\n");
+            sb.append("\t<Account>\n");
+            sb.append("\t<Number>" + accounts.getClass() + "<Number>\n");
+            sb.append("<Owner>" + accounts.getClass() + "<Owner>\n");
+            sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n");
+            sb.append("<Balance>" + accounts.getClass() + "<Balance>\n");
 
 
-             if (accounts.get(i) instanceof SavingsAccount) {
-                 sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n");
-                 sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n");
-                 sb.append("<Account>\n");
-             } else {
-                 sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
-                 sb.append("<Account>\n");
-             }
-         }
+            if (accounts.get(i) instanceof SavingsAccount) {
+                sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n");
+                sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n");
+                sb.append("<Account>\n");
+            } else {
+                sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
+                sb.append("<Account>\n");
+            }
+        }
     }
 }
