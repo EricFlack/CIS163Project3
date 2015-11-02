@@ -64,7 +64,7 @@ public class BankModel extends AbstractTableModel {
 
     public void add(Account account){
         this.accounts.add(account);
-        fireTableRowsInserted(0, accounts.size());
+        fireTableRowsInserted(0, accounts.size() - 1);
         /*
         int addLoc = accounts.indexOf(account);
         this.accounts.add(addLoc, account);
@@ -104,6 +104,18 @@ public class BankModel extends AbstractTableModel {
         }
         return null;
     }
+
+    public Account FindByBalance(double num){
+        for (Account a : this.accounts)
+        {
+            if (a.getBalance() == num)
+            {
+                return a;
+            }
+        }
+        return null;
+    }
+
 
     public Account FindByDateOpened(GregorianCalendar date){
         for (Account a : this.accounts)
@@ -212,7 +224,7 @@ public class BankModel extends AbstractTableModel {
         }
     }
     
-    public void saveBinary(File fileName) {
+    public void saveBinary(String fileName) {
 
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
@@ -228,7 +240,7 @@ public class BankModel extends AbstractTableModel {
         }
     }
 
-    public void loadBinary(File fileName) throws IOException{
+    public void loadBinary(String fileName) throws IOException{
 
         FileInputStream fileIn = new FileInputStream(fileName);
         ObjectInputStream in = new ObjectInputStream(fileIn);
@@ -261,22 +273,53 @@ public class BankModel extends AbstractTableModel {
         }
 
         for(int i = 0; i  < accounts.size(); i++) {
+            Account a = accounts.get(i);
             sb.append("<?xml version=1.0 encoding=utf-8?>\n");
-            sb.append("\t<Account>\n");
-            sb.append("\t<Number>" + accounts.getClass() + "<Number>\n");
-            sb.append("<Owner>" + accounts.getClass() + "<Owner>\n");
-            sb.append("<DateOpened>" + accounts.getClass() + "<DateOpened>\n");
-            sb.append("<Balance>" + accounts.getClass() + "<Balance>\n");
+            sb.append("<Account>\n");
+            sb.append("  <Number>" + a.getNumber() + "</Number>\n");
+            sb.append("  <Owner>" + a.getOwner() + "</Owner>\n");
+            sb.append("  <DateOpened>" + a.getDateOpened() + "</DateOpened>\n");
+            sb.append("  <Balance>" + a.getBalance() + "</Balance>\n");
 
-
-            if (accounts.get(i) instanceof SavingsAccount) {
-                sb.append("<miniBalance>" + accounts.getClass() + "<miniBalance>\n");
-                sb.append("<interestRate>" + accounts.getClass() + "<interestRate>\n");
-                sb.append("<Account>\n");
-            } else {
-                sb.append("<monthlyFee>" + accounts.getClass() + "<monthlyFee>\n");
-                sb.append("<Account>\n");
+            if (a instanceof SavingsAccount) {
+                sb.append("  <SavingsAccount>\n");
+                sb.append("    <miniBalance>" + ((SavingsAccount) a).getMinBalance() + "</iniBalance>\n");
+                sb.append("    <interestRate>" + ((SavingsAccount) a).getInterestRate() + "0</interestRate>\n");
+                sb.append("  </SavingsAccount>\n");
+                sb.append("</Account>\n");
+            } else if(a instanceof CheckingAccount) {
+                sb.append("  <CheckingAccount>\n");
+                sb.append("    <monthlyFee>" + ((CheckingAccount) a).getMonthlyFee() + "</monthlyFee>\n");
+                sb.append("  </CheckingAccount>\n");
+                sb.append("</Account>\n");
             }
         }
+    }
+
+    public void loadXML(String fileName){
+        try {
+
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+            StringBuilder sbFile = new StringBuilder();
+
+            String line = br.readLine();
+
+            while (line != null) {
+                sbFile.append(line);
+
+                line = br.readLine();
+            }
+
+            String readFile = sbFile.toString();
+            br.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }
